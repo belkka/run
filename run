@@ -2,8 +2,6 @@
 set -e
 readonly PROGNAME="$(basename "$0")" DIR="$(dirname "$(realpath "$0")")"
 
-echo "It's experimental message"
-
 help() {
     cat << HEREDOC
 Usage: $PROGNAME [--clean] <file>
@@ -21,7 +19,10 @@ Options:
         etc.), no run
 
     --clean
-        Remove previously produced binary/bytecode instead of running
+        Remove previously produced binary/bytecode instead of run
+
+    --cleanup
+        Remove produced binary/bytecode after run
 
 HEREDOC
 }
