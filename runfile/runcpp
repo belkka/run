@@ -1,0 +1,24 @@
+#!/usr/bin/make -f
+.PHONY: compile run clean match
+
+src = $(firstword $(wildcard *.cpp))
+bin = ./prog
+
+run: compile
+	"$(bin)"
+
+compile: $(bin)
+
+clean:
+	-rm "$(bin)"
+
+match:
+	case "$(src)" in *.cpp) exit 0;; esac; exit 1
+
+
+WARNINGS = -Wall -Wfloat-equal -Wlogical-op -Wshift-overflow=2 \
+           -Wduplicated-cond -Wconversion
+CPPFLAGS = -std=gnu++17
+
+$(bin): $(src)
+	g++ -o "$(bin)" -D LOCAL -g $(CPPFLAGS) $(WARNINGS) "$(src)"

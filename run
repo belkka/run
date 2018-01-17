@@ -1,0 +1,61 @@
+#!/bin/bash
+set -e
+readonly PROGNAME="$(basename "$0")" DIR="$(dirname "$(realpath "$0")")"
+
+help() {
+    cat << HEREDOC
+Usage: $PROGNAME [--clean] <file>
+
+Desctiption:
+    Compile (if necessary) and run source code. The filetype is detected by
+    extension.
+
+Options:
+    -h, --help
+        Show this message end exit
+
+    --compile
+        Become prepared for run (compile/produce bytecode for virtual machine,
+        etc.), no run
+
+    --clean
+        Remove previously produced binary/bytecode instead of running
+
+HEREDOC
+}
+
+# Parsing arguments
+declare -a args=()
+declare action=run cleanup=false
+
+for arg; do
+    case "$arg" in
+    -h|--help) help; exit;;
+    --compile) action=compile;;
+    --clean) action=clean;;
+    --cleanup) cleanup=true;;
+    -*) echo "Unknown parameter: '$arg'" >&2; exit 1;;
+    *) args+=("$arg");;
+    esac
+done
+set "${args[@]}"
+if [ $# -ne 1 ]; then help; exit 1; fi
+src="$1"
+
+# Main
+makefile_found=false
+shopt -s nullglob
+for makefile in "$DIR"/runfile/*; do
+    if make -s -f "$makefile" match src="$src" &>/dev/null; then
+        makefile_found=true
+        #basename "$makefile"  # debug
+        make -s -f "$makefile" "$action" src="$src"
+        if [ "$action" = run ] && $cleanup; then
+            make -s -f "$makefile" clean src="$src"
+        fi
+        break
+    fi
+done
+
+$makefile_found ||
+echo "Don't know how to run '$src'. Try to write a runfile for it!" >&2

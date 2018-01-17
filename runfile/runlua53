@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+.PHONY: compile run clean match
+
+src = $(firstword $(wildcard *.lua))
+luabytecode = ./luaprog
+
+run: compile
+	lua5.3 "$(luabytecode)"
+
+compile: $(luabytecode)
+
+clean:
+	-rm "$(luabytecode)"
+
+match:
+	case "$(src)" in *.lua) exit 0;; esac; exit 1
+
+
+$(luabytecode): $(src)
+	luac5.3 -o "$(luabytecode)" "$(src)"

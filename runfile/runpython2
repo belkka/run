@@ -1,0 +1,19 @@
+#!/usr/bin/make -f
+.PHONY: compile run clean match
+
+src = $(shell find . -maxdepth 1 -name '*.py' -a ! -name 'gentest*.py' \
+                   -print -quit)
+
+run:
+	python2 "$(src)"
+
+compile:
+
+clean:
+
+
+match:
+	case "$(src)" in \
+	*.py2) exit 0;; \
+	*.py) ! head -n 2 "$(src)" | grep -q "python \?3"; exit $$?;; \
+	esac; exit 1
