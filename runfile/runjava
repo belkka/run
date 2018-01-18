@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+.PHONY: compile run clean match
+.SILENT:
+
+src = $(firstword $(wildcard *.java))
+mainclass = Main.class
+
+run: compile
+	java $(basename $(mainclass))
+
+compile: $(mainclass)
+
+clean:
+	-rm ./*.class
+
+match:
+	case $(src) in *.java) exit;; esac; exit 1
+
+
+$(mainclass): $(src)
+	javac -d . $(src)

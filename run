@@ -49,12 +49,12 @@ src="$1"
 makefile_found=false
 shopt -s nullglob
 for makefile in "$DIR"/runfile/*; do
-    if make -s -f "$makefile" match src="$src" &>/dev/null; then
+    if make -f "$makefile" match src="$src" &>/dev/null; then
         makefile_found=true
         #basename "$makefile"  # debug
-        make -s -f "$makefile" "$action" src="$src"
+        make -f "$makefile" "$action" src="$src"
         if [ "$action" = run ] && $cleanup; then
-            make -s -f "$makefile" clean src="$src"
+            make -f "$makefile" clean src="$src"
         fi
         break
     fi
