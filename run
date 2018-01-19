@@ -4,7 +4,7 @@ readonly PROGNAME="$(basename "$0")" DIR="$(dirname "$(realpath "$0")")"
 
 help() {
     cat << HEREDOC
-Usage: $PROGNAME [--clean] <file>
+Usage: $PROGNAME [--compile] [--clean] [--cleanup] <file>
 
 Desctiption:
     Compile (if necessary) and run source code. The filetype is detected by
@@ -36,7 +36,7 @@ for arg; do
     -h|--help) help; exit;;
     --compile) action=compile;;
     --clean) action=clean;;
-    --cleanup) cleanup=true;;
+    --cleanup) action=run cleanup=true;;
     -*) echo "Unknown parameter: '$arg'" >&2; exit 1;;
     *) args+=("$arg");;
     esac
