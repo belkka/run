@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+.PHONY: compile run clean match
+.SILENT:
+
+src = Makefile
+
+run: compile
+	make -f "$(src)" run
+
+compile:
+	make -f "$(src)" compile
+
+clean:
+	make -f "$(src)" clean
+
+match:
+	case "$(src)" in *Make*) exit;; esac; exit 1

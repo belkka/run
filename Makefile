@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-.PHONY: testing stdout_hello_stderr_world sum4and7is11
+.PHONY: testing clean stdout_hello_stderr_world sum4and7is11
 .SILENT:
 
 SHELL = bash
@@ -14,7 +14,10 @@ testing: stdout_hello_stderr_world sum4and7is11
 	[ -f stderr ] && rm stderr
 
 
-stdout_hello_stderr_world:
+clean:
+	[ -f ./prog ] && rm ./prog || true
+
+stdout_hello_stderr_world: clean
 	./run test/stdout_hello_stderr_world.cpp --cleanup >stdout 2>stderr
 	
 	if ! diff -w -s stdout <(echo hello) &>/dev/null; then \
@@ -34,7 +37,7 @@ stdout_hello_stderr_world:
 	$(OK)
 
 
-sum4and7is11:
+sum4and7is11: clean
 	for sum in test/sum.*; do \
 		echo 4 7 | ./run "$$sum" --cleanup >stdout; \
 		if ! diff -sw stdout <(echo 11) &>/dev/null; then \
