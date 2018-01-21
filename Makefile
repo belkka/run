@@ -46,5 +46,4 @@ sum4and7is11: clean
 		else \
 			echo " * $${sum}: $(GREEN_OK)"; \
 		fi; \
-	done
-	$(OK)
+	done && $(OK)
