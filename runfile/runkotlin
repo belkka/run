@@ -1,0 +1,25 @@
+#!/usr/bin/make -f
+.PHONY: run compile clean match
+.SILENT:
+
+PATH += :~/.sdkman/candidates/kotlin/current/bin  # assume that [ -n $PATH ]
+
+src = $(firstword $(wildcard *.kt))
+jar = Main.jar
+
+run: compile
+	kotlin -cp $(jar) MainKt
+
+compile: $(jar)
+
+$(jar): $(src)
+	ln -s $(src) Main.kt; \
+	kotlinc -d $@ Main.kt; \
+	[ -h Main.kt ] && rm Main.kt
+
+clean:
+	-rm $(jar)
+
+
+match:
+	case "$(src)" in *.kt) exit;; esac; exit 1
